@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pandan Lane: a WebMCP demo</title>
+    <meta name="description" content="A fictional restaurant menu that exposes WebMCP tools, so an AI agent can recommend dishes and prepare an order." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232f6f4e'/%3E%3Cpath d='M9 20c1-7 6-11 14-12-1 8-5 13-12 14l-2 2' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="src/app.js"></script>
+  </head>
+  <body>
+    <div class="layout">
+      <main>
+        <header class="site-header">
+          <h1>Pandan Lane</h1>
+          <p>A fictional Southeast Asian kitchen, built to show how WebMCP works. The allergen details are made up, so please don't rely on them.</p>
+        </header>
+
+        <aside id="setup-banner" class="setup-banner" hidden>
+          <h2>This browser isn't exposing WebMCP</h2>
+          <p>You can still read the menu and fill in the order form. To let an agent use the page:</p>
+          <ol>
+            <li>Open <code>chrome://flags/#enable-webmcp-testing</code>, enable it and relaunch Chrome.</li>
+            <li>Install the <a href="https://chromewebstore.google.com/detail/model-context-tool-inspec/gbpdfapgefenggkahomfgkhfehlcenpd">Model Context Tool Inspector</a> extension and add a Gemini API key.</li>
+            <li>Reload this page and open the extension.</li>
+          </ol>
+        </aside>
+
+        <div id="picks-bar" class="picks-bar" hidden>
+          <span data-picks-count></span>
+          <button id="clear-picks" type="button">Clear</button>
+        </div>
+        <div id="menu"></div>
+      </main>
+
+      <div class="sidebar">
+        <section class="panel" aria-labelledby="order-title">
+          <h2 id="order-title">Your order</h2>
+          <!--
+            This form is the whole place_order tool. Chrome builds its input schema from the
+            fields. There is no toolautosubmit, so the agent can only fill it in: sending it
+            stays with the diner.
+          -->
+          <form
+            id="order-form"
+            toolname="place_order"
+            tooldescription="Prepare the diner's order by filling in the form on the page. Nothing is sent until the diner presses Send order, so this call only returns once they decide. If the call is cancelled, the diner chose not to send it: do not call this tool again. Tell them no order was sent and ask what they would like."
+          >
+            <div class="table-row">
+              <label for="order-table">Table</label>
+              <input
+                id="order-table"
+                name="table"
+                type="number"
+                min="1"
+                max="12"
+                required
+                toolparamdescription="The diner's table number, from 1 to 12."
+              />
+            </div>
+            <label for="order-dishes">Dishes</label>
+            <!--
+              Written out by hand, in one flat list, because of two things Chrome 156 does:
+              options added later by a module never reach the agent's schema, and an
+              <optgroup> makes the agent's choices land on the wrong options.
+            -->
+            <select
+              id="order-dishes"
+              name="dishes"
+              multiple
+              required
+              size="5"
+              toolparamdescription="The dishes to order."
+            >
+              <option value="kueh-pie-tee">Kueh pie tee (S$12)</option>
+              <option value="rojak">Rojak (S$10)</option>
+              <option value="otak-otak">Otak-otak (S$13)</option>
+              <option value="tofu-goreng">Tahu goreng (S$9)</option>
+              <option value="laksa">Katong laksa (S$19)</option>
+              <option value="chicken-rice">Hainanese chicken rice (S$17)</option>
+              <option value="beef-rendang">Beef rendang (S$26)</option>
+              <option value="char-kway-teow">Char kway teow (S$18)</option>
+              <option value="mushroom-rendang">King oyster mushroom rendang (S$21)</option>
+              <option value="nasi-ulam">Nasi ulam (S$16)</option>
+              <option value="mee-goreng">Mee goreng (S$15)</option>
+              <option value="cendol">Cendol (S$8)</option>
+              <option value="kaya-toast-pudding">Kaya bread pudding (S$10)</option>
+              <option value="pulut-hitam">Pulut hitam (S$9)</option>
+              <option value="peanut-pancake">Min jiang kueh (S$8)</option>
+              <option value="teh-tarik">Teh tarik (S$5)</option>
+              <option value="calamansi-soda">Calamansi soda (S$6)</option>
+              <option value="bandung">Bandung (S$5)</option>
+            </select>
+            <p class="hint">Hold Ctrl or Cmd to choose several.</p>
+            <p id="order-summary" class="order-summary" aria-live="polite"></p>
+            <div class="form-actions">
+              <button type="submit" class="button-primary">Send order</button>
+              <button type="reset">Cancel</button>
+            </div>
+          </form>
+          <p id="order-confirmation" class="order-confirmation" role="status" hidden></p>
+        </section>
+
+        <section class="panel panel-activity" aria-labelledby="activity-title">
+          <h2 id="activity-title">Agent activity</h2>
+          <h3 class="panel-label">Tools on this page right now</h3>
+          <ul id="tool-list" class="tool-list"></ul>
+          <h3 class="panel-label">Calls, newest first</h3>
+          <ol id="activity-log" class="activity-log" aria-live="polite">
+            <li class="log-empty">
+              Nothing yet. Try asking your agent: <q>I'm allergic to peanuts and shellfish. Recommend a main and a dessert under S$25 each, nothing too spicy, then get my order ready for table 4.</q>
+            </li>
+          </ol>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

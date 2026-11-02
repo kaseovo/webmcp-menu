@@ -1,0 +1,16 @@
+{
+  "name": "webmcp-menu",
+  "version": "0.1.0",
+  "description": "A fictional restaurant menu showing how to use WebMCP.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test test/search.test.js",
+    "test:browser": "node --test test/browser.test.mjs"
+  }
+}

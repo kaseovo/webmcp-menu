@@ -1,0 +1,454 @@
+:root {
+  color-scheme: light;
+  --paper: #fbf7ef;
+  --card: #fffdf8;
+  --ink: #2a2420;
+  --muted: #6b6157;
+  --line: #e6decf;
+  --pandan: #2f6f4e;
+  --pandan-tint: #e8f2e9;
+  --chili: #a83a24;
+  --chili-tint: #fbeae5;
+  --gold: #8a6414;
+  --gold-tint: #f8eed4;
+  --display: ui-serif, 'Iowan Old Style', Georgia, serif;
+  --body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0 16px 48px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.5 var(--body);
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul {
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button {
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--muted);
+}
+
+:focus-visible {
+  outline: 2px solid var(--pandan);
+  outline-offset: 2px;
+}
+
+.site-header {
+  padding: 8px 0 24px;
+}
+
+.site-header h1 {
+  font: 600 2.75rem/1.1 var(--display);
+  letter-spacing: -0.01em;
+}
+
+.site-header p {
+  max-width: 62ch;
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.setup-banner {
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: var(--gold-tint);
+}
+
+.setup-banner h2 {
+  font-size: 1rem;
+}
+
+.setup-banner ol {
+  margin-top: 8px;
+  padding-left: 22px;
+}
+
+.setup-banner code {
+  overflow-wrap: anywhere;
+  font: 0.9em var(--mono);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 32px;
+  align-items: start;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-top: 16px;
+}
+
+.picks-bar {
+  position: sticky;
+  top: 8px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 8px;
+  background: var(--pandan);
+  color: #fff;
+  font-weight: 600;
+}
+
+.picks-bar button {
+  border-color: transparent;
+  color: var(--pandan);
+}
+
+.course + .course {
+  margin-top: 36px;
+}
+
+.course h2 {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font: 600 1.5rem/1.2 var(--display);
+}
+
+.dish {
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid transparent;
+}
+
+.dish-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.dish h3 {
+  font: 600 1.125rem/1.3 var(--display);
+}
+
+.dish-price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dish-description {
+  max-width: 62ch;
+  margin-top: 2px;
+}
+
+.dish-badges:not(:empty) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--pandan-tint);
+  color: var(--pandan);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-chef {
+  background: var(--gold-tint);
+  color: var(--gold);
+}
+
+.badge-sold-out {
+  background: var(--chili-tint);
+  color: var(--chili);
+}
+
+.dish-facts,
+.dish-allergens {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.dish-allergens {
+  margin-top: 0;
+}
+
+.dish.is-sold-out :is(h3, .dish-price, .dish-description, .dish-facts, .dish-allergens) {
+  opacity: 0.55;
+}
+
+.dish.is-picked {
+  border-left-color: var(--pandan);
+  border-radius: 0 8px 8px 0;
+  background: var(--pandan-tint);
+  scroll-margin-top: 64px;
+}
+
+.dish-reason {
+  margin-top: 10px;
+  color: var(--pandan);
+  font-weight: 600;
+}
+
+.dish-reason::before {
+  content: 'Why: ';
+}
+
+/* Both panels stay on screen, because watching the agent is the point of the page. */
+.sidebar {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.panel {
+  flex: none;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+}
+
+.panel-activity {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+}
+
+.table-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.panel .table-row label {
+  margin-top: 0;
+}
+
+.panel .table-row input {
+  width: 84px;
+  margin-top: 0;
+}
+
+.panel h2 {
+  font: 600 1.25rem/1.2 var(--display);
+}
+
+.panel label {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.panel input,
+.panel select {
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.hint {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.order-summary {
+  margin-top: 10px;
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.button-primary {
+  border-color: var(--pandan);
+  background: var(--pandan);
+  color: #fff;
+  font-weight: 600;
+}
+
+.button-primary:hover {
+  border-color: var(--ink);
+}
+
+.order-confirmation {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--pandan-tint);
+  color: var(--pandan);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Room for the active outline below, so that nothing moves when it appears. */
+#order-form {
+  display: flow-root;
+  margin: 2px -8px -8px;
+  padding: 0 8px 8px;
+  border-radius: 8px;
+}
+
+/* WebMCP pseudo-classes: on while an agent has filled the form and is waiting. */
+#order-form:tool-form-active {
+  outline: 2px dashed var(--pandan);
+  outline-offset: 0;
+  background: var(--pandan-tint);
+}
+
+.button-primary:tool-submit-active {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.panel-label {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 0;
+  list-style: none;
+}
+
+.tool-list:empty::before {
+  content: 'None';
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.tool-list li {
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: var(--pandan-tint);
+  color: var(--pandan);
+  font: 0.75rem var(--mono);
+}
+
+.activity-log {
+  flex: 1 1 0;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 0;
+  margin-top: 6px;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.log-empty {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.log-entry {
+  padding: 8px 10px;
+  border-left: 3px solid var(--pandan);
+  border-radius: 0 6px 6px 0;
+  background: var(--paper);
+  font-size: 0.8125rem;
+}
+
+.log-entry.is-event {
+  border-left-color: var(--gold);
+}
+
+.log-entry.is-error {
+  border-left-color: var(--chili);
+  background: var(--chili-tint);
+}
+
+.log-entry strong {
+  display: block;
+  font-family: var(--mono);
+}
+
+.log-entry code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font: 0.75rem/1.4 var(--mono);
+}
+
+.log-entry summary {
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.log-entry pre {
+  max-height: 220px;
+  margin: 4px 0 0;
+  overflow: auto;
+  font: 0.6875rem/1.4 var(--mono);
+}
+
+@media (max-width: 920px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  .activity-log {
+    overflow: visible;
+  }
+}
